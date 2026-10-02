@@ -1,0 +1,1238 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Food Business</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+header {
+    background: #ff6600;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+nav {
+    background: white;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px #ccc;
+}
+
+nav button {
+    background: #ff6600;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    margin: 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+nav button:hover {
+    background: #e85c00;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 7px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+textarea {
+    height: 80px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.primary {
+    background: #ff6600;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 6px;
+}
+
+.success {
+    background: green;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 6px;
+}
+
+.danger {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+.blue {
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 6px;
+}
+
+.rider-card {
+    border-left: 5px solid #1976d2;
+}
+
+.status-box {
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+.food-img {
+    width: 200px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff6600;
+}
+
+.cart {
+    background: #fff3e8;
+}
+
+.badge {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #eee;
+    font-weight: bold;
+}
+
+.rider-action {
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🍔 Food Business</h1>
+    <p>Zomato / Swiggy Style Food Delivery</p>
+</header>
+
+<nav>
+    <button onclick="showSection('admin')">Admin</button>
+    <button onclick="showSection('customer')">Customer</button>
+    <button onclick="showSection('orders')">Orders</button>
+    <button onclick="showSection('rider')">🚴 Rider</button>
+</nav>
+
+<div class="container">
+
+<!-- ================================================= -->
+<!-- ADMIN -->
+<!-- ================================================= -->
+
+<div id="admin" class="section active">
+
+    <h2>Admin Panel</h2>
+
+    <div class="card">
+
+        <h3>Add Restaurant</h3>
+
+        <input id="restaurantName"
+               placeholder="Restaurant Name">
+
+        <input id="restaurantAddress"
+               placeholder="Address">
+
+        <input id="restaurantPhone"
+               placeholder="Phone">
+
+        <button class="primary"
+                onclick="addRestaurant()">
+            Add Restaurant
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Restaurants</h3>
+
+        <div id="adminRestaurants">
+            Loading...
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Add Food Item</h3>
+
+        <select id="foodRestaurant">
+            <option value="">
+                Select Restaurant
+            </option>
+        </select>
+
+        <input id="foodName"
+               placeholder="Food Name">
+
+        <textarea id="foodDescription"
+                  placeholder="Food Description"></textarea>
+
+        <input id="foodPrice"
+               type="number"
+               placeholder="Price">
+
+        <input id="foodCategory"
+               placeholder="Category">
+
+        <input id="foodImage"
+               placeholder="Image URL">
+
+        <button class="success"
+                onclick="addFood()">
+            Add Food
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Food Items</h3>
+
+        <div id="adminMenu">
+            Loading...
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- CUSTOMER -->
+<!-- ================================================= -->
+
+<div id="customer" class="section">
+
+    <h2>Customer App</h2>
+
+    <div class="card">
+
+        <h3>Restaurants</h3>
+
+        <div id="customerRestaurants">
+            Loading...
+        </div>
+
+    </div>
+
+    <div id="menuSection"
+         class="card"
+         style="display:none;">
+
+        <h2 id="menuTitle">
+            Restaurant Menu
+        </h2>
+
+        <div id="customerMenu"></div>
+
+    </div>
+
+    <div class="card cart">
+
+        <h3>🛒 Cart</h3>
+
+        <div id="cartItems">
+            Cart is empty
+        </div>
+
+        <h3>
+            Total: ₹<span id="cartTotal">0</span>
+        </h3>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Place Order</h3>
+
+        <input id="customerName"
+               placeholder="Your Name">
+
+        <input id="customerPhone"
+               placeholder="Phone Number">
+
+        <textarea id="deliveryAddress"
+                  placeholder="Delivery Address"></textarea>
+
+        <select id="paymentMethod">
+
+            <option value="COD">
+                Cash on Delivery
+            </option>
+
+            <option value="ONLINE">
+                Online Payment
+            </option>
+
+        </select>
+
+        <button class="success"
+                onclick="placeOrder()">
+            Place Order
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- ORDERS -->
+<!-- ================================================= -->
+
+<div id="orders" class="section">
+
+    <h2>All Orders</h2>
+
+    <button class="primary"
+            onclick="loadOrders()">
+        🔄 Refresh Orders
+    </button>
+
+    <div id="ordersList"></div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- RIDER -->
+<!-- ================================================= -->
+
+<div id="rider" class="section">
+
+    <h2>🚴 Rider Panel</h2>
+
+    <div class="card">
+
+        <h3>Rider Information</h3>
+
+        <input id="riderName"
+               placeholder="Rider Name"
+               value="Rider 1">
+
+        <input id="riderPhone"
+               placeholder="Rider Phone"
+               value="9999999999">
+
+        <button class="blue"
+                onclick="saveRider()">
+            Save Rider
+        </button>
+
+        <p id="riderMessage"></p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>📦 Available / Active Orders</h3>
+
+        <button class="primary"
+                onclick="loadRiderOrders()">
+            🔄 Refresh Orders
+        </button>
+
+        <div id="riderOrders">
+            Loading orders...
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const API = "http://localhost:5000";
+
+let restaurants = [];
+let menuItems = [];
+let cart = [];
+
+
+// =================================================
+// SECTION SWITCH
+// =================================================
+
+function showSection(sectionName) {
+
+    console.log("Opening:", sectionName);
+
+    document.querySelectorAll(".section")
+        .forEach(function(section) {
+
+            section.classList.remove("active");
+
+        });
+
+    const section =
+        document.getElementById(sectionName);
+
+    if (section) {
+
+        section.classList.add("active");
+
+    }
+
+    if (sectionName === "admin") {
+
+        loadRestaurants();
+        loadMenu();
+
+    }
+
+    if (sectionName === "customer") {
+
+        loadCustomerRestaurants();
+
+    }
+
+    if (sectionName === "orders") {
+
+        loadOrders();
+
+    }
+
+    if (sectionName === "rider") {
+
+        loadRiderOrders();
+
+    }
+
+}
+
+
+// =================================================
+// LOAD RESTAURANTS
+// =================================================
+
+async function loadRestaurants() {
+
+    try {
+
+        const response =
+            await fetch(API + "/api/restaurants");
+
+        const data =
+            await response.json();
+
+        restaurants =
+            data.restaurants || [];
+
+        renderAdminRestaurants();
+
+        updateRestaurantDropdown();
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "adminRestaurants"
+        ).innerHTML =
+            "<p>Backend connect nahi ho raha.</p>";
+
+    }
+
+}
+
+
+// =================================================
+// ADMIN RESTAURANTS
+// =================================================
+
+function renderAdminRestaurants() {
+
+    const box =
+        document.getElementById(
+            "adminRestaurants"
+        );
+
+    if (restaurants.length === 0) {
+
+        box.innerHTML =
+            "<p>No restaurants added yet.</p>";
+
+        return;
+
+    }
+
+    box.innerHTML =
+        restaurants.map(function(r) {
+
+            return `
+
+                <div class="card">
+
+                    <h3>🍴 ${r.name}</h3>
+
+                    <p>
+                        📍 ${r.address}
+                    </p>
+
+                    <p>
+                        📞 ${r.phone}
+                    </p>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+// =================================================
+// RESTAURANT DROPDOWN
+// =================================================
+
+function updateRestaurantDropdown() {
+
+    const select =
+        document.getElementById(
+            "foodRestaurant"
+        );
+
+    select.innerHTML =
+        '<option value="">Select Restaurant</option>';
+
+    restaurants.forEach(function(r) {
+
+        select.innerHTML += `
+
+            <option value="${r.id}">
+                ${r.name}
+            </option>
+
+        `;
+
+    });
+
+}
+
+
+// =================================================
+// ADD RESTAURANT
+// =================================================
+
+async function addRestaurant() {
+
+    const name =
+        document.getElementById(
+            "restaurantName"
+        ).value.trim();
+
+    const address =
+        document.getElementById(
+            "restaurantAddress"
+        ).value.trim();
+
+    const phone =
+        document.getElementById(
+            "restaurantPhone"
+        ).value.trim();
+
+    if (!name) {
+
+        alert(
+            "Restaurant name enter karo."
+        );
+
+        return;
+
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                API + "/api/restaurants",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        name: name,
+                        address: address,
+                        phone: phone
+
+                    })
+
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (data.success) {
+
+            alert(
+                "Restaurant added successfully!"
+            );
+
+            document.getElementById(
+                "restaurantName"
+            ).value = "";
+
+            document.getElementById(
+                "restaurantAddress"
+            ).value = "";
+
+            document.getElementById(
+                "restaurantPhone"
+            ).value = "";
+
+            loadRestaurants();
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Restaurant add nahi hua."
+        );
+
+    }
+
+}
+
+
+// =================================================
+// CUSTOMER RESTAURANTS
+// =================================================
+
+async function loadCustomerRestaurants() {
+
+    try {
+
+        const response =
+            await fetch(
+                API + "/api/restaurants"
+            );
+
+        const data =
+            await response.json();
+
+        restaurants =
+            data.restaurants || [];
+
+        const box =
+            document.getElementById(
+                "customerRestaurants"
+            );
+
+        if (restaurants.length === 0) {
+
+            box.innerHTML =
+                "<p>No restaurants available.</p>";
+
+            return;
+
+        }
+
+        box.innerHTML =
+            restaurants.map(function(r) {
+
+                return `
+
+                    <div class="card">
+
+                        <h3>
+                            🍴 ${r.name}
+                        </h3>
+
+                        <p>
+                            📍 ${r.address}
+                        </p>
+
+                        <p>
+                            📞 ${r.phone}
+                        </p>
+
+                        <button
+                            class="primary"
+                            onclick="viewMenu(
+                                ${r.id},
+                                '${String(r.name)
+                                    .replace(/'/g, "\\'")}'
+                            )">
+
+                            View Menu
+
+                        </button>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "customerRestaurants"
+        ).innerHTML =
+            "<p>Backend connect nahi ho raha.</p>";
+
+    }
+
+}
+
+
+// =================================================
+// VIEW MENU
+// =================================================
+
+async function viewMenu(
+    restaurantId,
+    restaurantName
+) {
+
+    const menuSection =
+        document.getElementById(
+            "menuSection"
+        );
+
+    const menuTitle =
+        document.getElementById(
+            "menuTitle"
+        );
+
+    const menuBox =
+        document.getElementById(
+            "customerMenu"
+        );
+
+    menuSection.style.display =
+        "block";
+
+    menuTitle.innerText =
+        restaurantName + " - Menu";
+
+    menuBox.innerHTML =
+        "<p>Loading menu...</p>";
+
+    try {
+
+        const response =
+            await fetch(
+                API +
+                "/api/menu?restaurantId=" +
+                restaurantId
+            );
+
+        const data =
+            await response.json();
+
+        const menu =
+            data.menu || [];
+
+        if (menu.length === 0) {
+
+            menuBox.innerHTML =
+                "<p>No food items available.</p>";
+
+            menuSection.scrollIntoView({
+                behavior: "smooth"
+            });
+
+            return;
+
+        }
+
+        menuBox.innerHTML =
+            menu.map(function(item) {
+
+                return `
+
+                    <div class="card">
+
+                        ${
+                            item.image
+                            ?
+                            `<img
+                                class="food-img"
+                                src="${item.image}"
+                                alt="${item.name}">
+                            `
+                            :
+                            ""
+                        }
+
+                        <h3>
+                            ${item.name}
+                        </h3>
+
+                        <p>
+                            ${item.description || ""}
+                        </p>
+
+                        <p class="price">
+                            ₹${item.price}
+                        </p>
+
+                        <p>
+                            Category:
+                            ${item.category}
+                        </p>
+
+                        <button
+                            class="success"
+                            onclick="addToCart(
+                                ${item.id}
+                            )">
+
+                            🛒 Add to Cart
+
+                        </button>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+        menuSection.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        menuBox.innerHTML =
+            "<p>Menu load nahi ho raha.</p>";
+
+    }
+
+}
+
+
+// =================================================
+// LOAD MENU
+// =================================================
+
+async function loadMenu() {
+
+    try {
+
+        const response =
+            await fetch(
+                API + "/api/menu"
+            );
+
+        const data =
+            await response.json();
+
+        menuItems =
+            data.menu || [];
+
+        renderAdminMenu();
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+// =================================================
+// ADMIN MENU
+// =================================================
+
+function renderAdminMenu() {
+
+    const box =
+        document.getElementById(
+            "adminMenu"
+        );
+
+    if (menuItems.length === 0) {
+
+        box.innerHTML =
+            "<p>No food items added.</p>";
+
+        return;
+
+    }
+
+    box.innerHTML =
+        menuItems.map(function(item) {
+
+            const restaurant =
+                restaurants.find(
+                    function(r) {
+
+                        return r.id ===
+                            item.restaurantId;
+
+                    }
+                );
+
+            return `
+
+                <div class="card">
+
+                    <h3>
+                        ${item.name}
+                    </h3>
+
+                    <p>
+                        Restaurant:
+                        ${
+                            restaurant
+                            ? restaurant.name
+                            : "Unknown"
+                        }
+                    </p>
+
+                    <p class="price">
+                        ₹${item.price}
+                    </p>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+// =================================================
+// ADD FOOD
+// =================================================
+
+async function addFood() {
+
+    const restaurantId =
+        document.getElementById(
+            "foodRestaurant"
+        ).value;
+
+    const name =
+        document.getElementById(
+            "foodName"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "foodDescription"
+        ).value.trim();
+
+    const price =
+        document.getElementById(
+            "foodPrice"
+        ).value;
+
+    const category =
+        document.getElementById(
+            "foodCategory"
+        ).value.trim();
+
+    const image =
+        document.getElementById(
+            "foodImage"
+        ).value.trim();
+
+    if (!restaurantId) {
+
+        alert(
+            "Restaurant select karo."
+        );
+
+        return;
+
+    }
+
+    if (!name) {
+
+        alert(
+            "Food name enter karo."
+        );
+
+        return;
+
+    }
+
+    if (!price) {
+
+        alert(
+            "Price enter karo."
+        );
+
+        return;
+
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                API + "/api/menu",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        restaurantId:
+                            Number(restaurantId),
+
+                        name: name,
+
+                        description:
+                            description,
+
+                        price:
+                            Number(price),
+
+                        category:
+                            category,
+
+                        image:
+                            image
+
+                    })
+
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (data.success) {
+
+            alert(
+                "Food added successfully!"
+            );
+
+            document.getElementById(
+                "foodName"
+            ).value = "";
+
+            document.getElementById(
+                "foodDescription"
+            ).value = "";
+
+            document.getElementById(
+                "foodPrice"
+            ).value = "";
+
+            document.getElementById(
+                "foodCategory"
+            ).value = "";
+
+            document.getElementById(
+                "foodImage"
+            ).value = "";
+
+            loadMenu();
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Food add nahi hua."
+        );
+
+    }
+
+}
+
+
+// =================================================
+// CART
+// =================================================
+
+async function addToCart(itemId) {
+
+    try {
+
+        const response =
+            await fetch(
+                API + "/api/menu"
+            );
+
+        const data =
+            await response.json();
+
+        const item =
+            (data.menu || []).find(
+                function(food) {
+
+                    return food.id ===
+                        itemId;
+
+                }
+            );
+
+        if (!item) {
+
+            alert(
+                "Food item nahi mila."
+            );
+
+            return;
+
+        }
+
+        cart.push(item);
+
+        renderCart();
+
+        alert(
+            item.name +
+            " cart mein add ho gaya!"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+function removeFromCart(index) {
+
+    cart.splice(index, 1);
+
+    renderCart();
+
+}
+
+
+function renderCart() {
+
+    const box =
+        document.getElementById(
+            "cartItems"
+        );
+
+    const totalBox =
+        document.getElementById(
+            "cartTotal"
+        );
+
+    if (cart.length === 0) {
+
+        box.innerHTML =
+            "Cart is empty";
+
+        totalBox.innerText =
+            "0";
+
+        return;
+
+    }
+
+    let total = 0;
+
+    box.innerHTML =
+        cart.map(function(item, index) {
+
+            total +=
+                Number(item.price);
+
+            return `
+
+                <div class="card">
+
+                    <strong>
+                        ${item.name}
+                    </strong>
+
+                    - ₹${item.price}
+
+                    <button
+                        class="danger"
+```
