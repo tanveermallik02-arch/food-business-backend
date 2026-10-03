@@ -816,6 +816,7 @@ app.patch(
       const allowedStatuses = [
         "accepted",
         "preparing",
+        "ready",
         "rider_assigned",
         "picked_up",
         "out_for_delivery",
@@ -860,6 +861,7 @@ app.patch(
         const restaurantAllowed = [
           "accepted",
           "preparing",
+          "ready",
           "rider_assigned",
           "cancelled",
         ];
