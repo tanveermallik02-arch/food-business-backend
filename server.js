@@ -134,6 +134,7 @@ const orderSchema = new mongoose.Schema(
         "placed",
         "accepted",
         "preparing",
+        "ready",
         "rider_assigned",
         "picked_up",
         "out_for_delivery",
@@ -1271,6 +1272,7 @@ app.patch(
         "placed",
         "accepted",
         "preparing",
+        "ready",
         "rider_assigned",
         "picked_up",
         "out_for_delivery",
@@ -1423,3 +1425,4 @@ app.listen(PORT, () => {
     `Food Business Backend running at http://localhost:${PORT}`
   );
 });
+
